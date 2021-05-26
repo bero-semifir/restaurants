@@ -1,0 +1,1 @@
+mongoimport --host localhost:27017 --db app --collection restaurants --type json --file restaurants.json
