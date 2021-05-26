@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const URL = "mongodb://localhost:27017/app";
+const URL = process.env.URL;
 
 const mongoConnect = async() => {
     const conn = await mongoose.connect(URL, {
