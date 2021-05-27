@@ -1,0 +1,40 @@
+# Version de l'API Docker compose à utiliser
+version: "3.7"
+
+# Liste des services
+services:
+    # Container pour l'appli express
+    back:
+        # où trouver le Dockerfile pour lancer le container
+        build: .
+        # Si l'image a été push sur le hub Docker
+        # image: benoitsemifir/restau-back
+        # Assignation des variables d'environnement (option -e de docker run)
+        environment: 
+            - URL=mongodb://mongo:27017/app
+            - PORT=3000
+        # Config des ports du container back (option -p de docker run)
+        ports: 
+            - 8080:3000
+        # liste des services dont le container depend (docker attend que ces services soient lancé pour lancer le container)
+        depends_on: 
+            - mongo
+        # "stratégie" concernant l'attitude a avoir au moment d'un plantage
+        #  redémare toujous à moins d'avoir été arréter à la main
+        restart: unless-stopped
+    # Container pour le mongo
+    mongo:
+        # Image de base pour le container
+        image: mongo
+        # espace de stockage partagé en l'hote et docker (ici surtout au niveau du container qui fait tourner mongoDB)
+        volumes:
+            - ./data:/data/db
+            - ./dump:/dump
+    mongo-express:
+        image: mongo-express
+        environment: 
+            - ME_CONFIG_MONGODB_SERVER=mongo
+        ports:
+            - 8081:8081
+        depends_on: 
+            - mongo
