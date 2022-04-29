@@ -25,11 +25,8 @@ services:
     # Container pour le mongo
     mongo:
         # Image de base pour le container
-        image: mongo
-        # espace de stockage partagé en l'hote et docker (ici surtout au niveau du container qui fait tourner mongoDB)
-        volumes:
-            - ./data:/data/db
-            - ./dump:/dump
+        build: ./db/.
+        restart: unless-stopped
     mongo-express:
         image: mongo-express
         environment: 
